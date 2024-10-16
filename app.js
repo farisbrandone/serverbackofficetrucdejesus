@@ -11,8 +11,7 @@ const firebaseRoute = require("./src/routes/firebaseRoute");
 const {
   sendEveryMinuteNotification,
 } = require("./src/controllers/firebaseController");
-const date = format(Date.now(), "'le' dd/MM/yyyy 'à' kk:mm");
-console.log(date);
+
 app.use(bodyParser.json());
 app.use(cors());
 app.use("/api/firebase", firebaseRoute);

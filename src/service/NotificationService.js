@@ -10,7 +10,6 @@ async function getDeviceTokensss() {
     });
     return registrationTokens;
   } catch (error) {
-    console.log("get device tokens: ", error.message);
     throw new Error("failed to get device tokens");
   }
 }
@@ -19,7 +18,7 @@ class NotificationService {
   static async sendNotification(title, body, iconUrl = "", actionUrl = "") {
     try {
       const deviceTokens = await getDeviceTokensss();
-      console.log({ title, body, iconUrl, actionUrl });
+
       /*  const { title, body } = { title: "notif", body: "new" }; */
       const message = {
         notification: {
@@ -33,18 +32,16 @@ class NotificationService {
       const ref = admin.firestore().collection("Notifications");
       const date = format(Date.now(), "'le' dd/MM/yyyy 'à' kk:mm");
       const result = await ref.add({ title, body, iconUrl, actionUrl, date });
-      console.log({ result: result });
-      console.log({ response });
+
       return response;
     } catch (error) {
-      console.error(error);
       throw new Error("putain de merde");
     }
   }
 
   static async sendMultipleNotification(title, body, iconUrl, actionUrl) {
     const deviceTokens = await getDeviceTokensss();
-    console.log(deviceTokens);
+
     const messages = deviceTokens.map((token) => ({
       notification: {
         title: title + "$-*" + iconUrl,
@@ -60,7 +57,6 @@ class NotificationService {
       const result = await ref.add({ title, body, iconUrl, actionUrl, date });
       return response;
     } catch (error) {
-      console.log("out ohhhh");
       throw error;
     }
   }

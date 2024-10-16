@@ -13,7 +13,6 @@ const sendFirebaseNotification = async (req, res) => {
 };
 
 const sendMultipleFirebaseNotification = async (req, res) => {
-  console.log(req.body);
   try {
     const { title, body, iconUrl, actionUrl } = req.body;
     await NotificationService.sendMultipleNotification(
