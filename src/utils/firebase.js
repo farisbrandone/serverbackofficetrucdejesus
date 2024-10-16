@@ -1,7 +1,7 @@
 var admin = require("firebase-admin");
 const dotenv = require("dotenv");
 dotenv.config();
-var serviceAccount = require("./firebaseAdminSDK.json");
+//var serviceAccount = require("./firebaseAdminSDK.json");
 console.log(process.env.FIREBASE_PROJECT_ID);
 
 console.log(process.env.FIREBASE_PROJECT_ID);

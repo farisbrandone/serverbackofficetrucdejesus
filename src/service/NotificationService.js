@@ -44,6 +44,7 @@ class NotificationService {
 
   static async sendMultipleNotification(title, body, iconUrl, actionUrl) {
     const deviceTokens = await getDeviceTokensss();
+    console.log(deviceTokens);
     const messages = deviceTokens.map((token) => ({
       notification: {
         title: title + "$-*" + iconUrl,
@@ -59,6 +60,7 @@ class NotificationService {
       const result = await ref.add({ title, body, iconUrl, actionUrl, date });
       return response;
     } catch (error) {
+      console.log("out ohhhh");
       throw error;
     }
   }
