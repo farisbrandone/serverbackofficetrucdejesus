@@ -1,5 +1,7 @@
 const admin = require("../utils/firebase");
 const { format } = require("date-fns");
+const dotenv = require("dotenv");
+dotenv.config();
 async function getDeviceTokensss() {
   let registrationTokens = [];
   try {
@@ -56,6 +58,42 @@ class NotificationService {
       const date = format(Date.now(), "'le' dd/MM/yyyy 'à' kk:mm");
       const result = await ref.add({ title, body, iconUrl, actionUrl, date });
       return response;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  static async sendOnFirebaseModificationOnCommunity(
+    title,
+    description,
+    logoUrl,
+    banniereUrl
+  ) {
+    try {
+      //const ref = admin.firestore().collection("CommunityData");
+      const docRef = admin
+        .firestore()
+        .collection("CommunityData")
+        .doc(process.env.COMMUNITYDATAID);
+      const date = format(Date.now(), "'le' dd/MM/yyyy 'à' kk:mm");
+
+      const result = await docRef.update({
+        title,
+        description,
+        logoUrl,
+        banniereUrl,
+        date,
+      });
+      console.log(result);
+      //await ref.
+      /*  const result = await ref.add({
+        title,
+        description,
+        logoUrl,
+        banniereUrl,
+        date,
+      }); */
+      return result;
     } catch (error) {
       throw error;
     }

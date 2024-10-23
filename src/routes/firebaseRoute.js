@@ -2,6 +2,7 @@ const express = require("express");
 const {
   sendFirebaseNotification,
   sendMultipleFirebaseNotification,
+  sendModificationOnCommunity,
 } = require("../controllers/firebaseController");
 const router = express.Router();
 router.post("/send-notification", async (req, res) => {
@@ -11,6 +12,11 @@ router.post("/send-notification", async (req, res) => {
 
 router.post("/send-multiple-notification", async (req, res) => {
   const result = await sendMultipleFirebaseNotification(req, res);
+  return res.send(result);
+});
+
+router.post("/send-modification-on-community", async (req, res) => {
+  const result = await sendModificationOnCommunity(req, res);
   return res.send(result);
 });
 
