@@ -54,7 +54,6 @@ class NotificationService {
       notification: {
         title: title + "$-*" + iconUrl,
         body: body + "$-*" + actionUrl,
-        icon: iconUrl,
       },
       webpush: {
         headers: { Urgency: "high" },
