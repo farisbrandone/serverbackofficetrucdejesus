@@ -71,7 +71,10 @@ class NotificationService {
             },
           ],
         },
-        fcmOptions: { link: "https://untrucdejesus.vercel.app" },
+        fcmOptions: {
+          link: "https://untrucdejesus.vercel.app",
+          collapseKey: "unique_key",
+        },
       },
       token: token,
     }));
