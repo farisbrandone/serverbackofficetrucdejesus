@@ -43,29 +43,36 @@ class NotificationService {
 
   static async sendMultipleNotification(title, body, iconUrl, actionUrl) {
     const deviceTokens = await getDeviceTokensss();
-
+    console.log({
+      title,
+      body,
+      iconUrl,
+      actionUrl,
+      deviceTokens: deviceTokens.length,
+    });
     const messages = deviceTokens.map((token) => ({
       notification: {
         title: title + "$-*" + iconUrl,
         body: body + "$-*" + actionUrl,
         icon: iconUrl,
-        webpush: {
-          notification: {
-            actions: [
-              {
-                action: "open_url",
-                title: "Open App",
-                icon: "https://untrucdejesus.vercel.app/",
-              },
-              {
-                action: "dismiss",
-                title: "Dismiss",
-                icon: "https://untrucdejesus.vercel.app/",
-              },
-            ],
-          },
-          fcmOptions: { link: "https://untrucdejesus.vercel.app/" },
+      },
+      webpush: {
+        headers: { Urgency: "high" },
+        notification: {
+          title: title,
+          body: body,
+          icon: iconUrl,
+          badge:
+            "https://trucdejesus.appowls.io/assets/apps/user_1837/app_3120/draft/icon/app_logo.png",
+          actions: [
+            {
+              action: "Ouvrir",
+              title: "Ouvrir",
+              icon: "https://trucdejesus.appowls.io/assets/apps/user_1837/app_3120/draft/icon/app_logo.png",
+            },
+          ],
         },
+        fcmOptions: { link: "https://untrucdejesus.vercel.app" },
       },
       token: token,
     }));
@@ -75,8 +82,10 @@ class NotificationService {
       const ref = admin.firestore().collection("Notifications");
       const date = format(Date.now(), "'le' dd/MM/yyyy 'à' kk:mm");
       const result = await ref.add({ title, body, iconUrl, actionUrl, date });
+      console.log(response.responses[0].error.message);
       return response;
     } catch (error) {
+      console.log(error);
       throw error;
     }
   }
