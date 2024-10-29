@@ -82,7 +82,8 @@ class NotificationService {
       },
       token: token,
     }));
-
+    const uniqueKey = uuidv4();
+    console.log({ uniqueKey });
     try {
       const response = await admin.messaging().sendEach(messages);
       const ref = admin.firestore().collection("Notifications");
