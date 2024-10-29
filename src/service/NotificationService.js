@@ -1,7 +1,11 @@
 const admin = require("../utils/firebase");
 const { format } = require("date-fns");
+const { v4: uuidv4 } = require("uuid");
+const uniqueKey = uuidv4();
 const dotenv = require("dotenv");
 dotenv.config();
+
+console.log(uniqueKey);
 async function getDeviceTokensss() {
   let registrationTokens = [];
   try {
@@ -73,7 +77,7 @@ class NotificationService {
         },
         fcmOptions: {
           link: "https://untrucdejesus.vercel.app",
-          /* collapseKey: "unique_key", */
+          collapseKey: uniqueKey,
         },
       },
       token: token,
