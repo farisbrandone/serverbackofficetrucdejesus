@@ -81,7 +81,7 @@ class NotificationService {
       const ref = admin.firestore().collection("Notifications");
       const date = format(Date.now(), "'le' dd/MM/yyyy 'à' kk:mm");
       const result = await ref.add({ title, body, iconUrl, actionUrl, date });
-      console.log(response.responses[0].error.message);
+      console.log(response);
       return response;
     } catch (error) {
       console.log(error);
