@@ -55,7 +55,7 @@ class NotificationService {
         title: title + "$-*" + iconUrl,
         body: body + "$-*" + actionUrl,
       },
-      webpush: {
+      /*  webpush: {
         headers: { Urgency: "high" },
         notification: {
           title: title,
@@ -72,7 +72,7 @@ class NotificationService {
           ],
         },
         fcmOptions: { link: "https://untrucdejesus.vercel.app" },
-      },
+      }, */
       token: token,
     }));
 
