@@ -48,6 +48,24 @@ class NotificationService {
       notification: {
         title: title + "$-*" + iconUrl,
         body: body + "$-*" + actionUrl,
+        icon: iconUrl,
+        webpush: {
+          notification: {
+            actions: [
+              {
+                action: "open_url",
+                title: "Open App",
+                icon: "https://untrucdejesus.vercel.app/",
+              },
+              {
+                action: "dismiss",
+                title: "Dismiss",
+                icon: "https://untrucdejesus.vercel.app/",
+              },
+            ],
+          },
+          fcmOptions: { link: "https://untrucdejesus.vercel.app/" },
+        },
       },
       token: token,
     }));
