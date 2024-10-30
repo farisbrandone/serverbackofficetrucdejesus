@@ -74,7 +74,7 @@ class NotificationService {
       },
       token: token,
     }));
-
+    console.log({ papa: "papa" });
     try {
       const response = await admin.messaging().sendEach(messages);
       const ref = admin.firestore().collection("Notifications");
