@@ -1,11 +1,8 @@
 const admin = require("../utils/firebase");
 const { format } = require("date-fns");
 const { v4: uuidv4 } = require("uuid");
-const uniqueKey = uuidv4();
 const dotenv = require("dotenv");
 dotenv.config();
-
-console.log(uniqueKey);
 async function getDeviceTokensss() {
   let registrationTokens = [];
   try {
@@ -47,13 +44,8 @@ class NotificationService {
 
   static async sendMultipleNotification(title, body, iconUrl, actionUrl) {
     const deviceTokens = await getDeviceTokensss();
-    console.log({
-      title,
-      body,
-      iconUrl,
-      actionUrl,
-      deviceTokens: deviceTokens.length,
-    });
+    const uniqueKey = uuidv4();
+    console.log({ uniqueKey });
     const messages = deviceTokens.map((token) => ({
       /*  notification: {
         title: title + "$-*" + iconUrl,
@@ -82,8 +74,7 @@ class NotificationService {
       },
       token: token,
     }));
-    const uniqueKey = uuidv4();
-    console.log({ uniqueKey });
+
     try {
       const response = await admin.messaging().sendEach(messages);
       const ref = admin.firestore().collection("Notifications");
