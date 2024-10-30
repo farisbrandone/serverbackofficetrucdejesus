@@ -44,8 +44,8 @@ class NotificationService {
 
   static async sendMultipleNotification(title, body, iconUrl, actionUrl) {
     const deviceTokens = await getDeviceTokensss();
-    const uniqueKey = uuidv4();
-    console.log({ uniqueKey });
+    /* const uniqueKey = uuidv4();
+    console.log({ uniqueKey }); */
     const messages = deviceTokens.map((token) => ({
       /*  notification: {
         title: title + "$-*" + iconUrl,
@@ -69,7 +69,7 @@ class NotificationService {
         },
         fcmOptions: {
           link: "https://untrucdejesus.vercel.app",
-          collapseKey: uniqueKey,
+          //collapseKey: uniqueKey,
         },
       },
       token: token,
