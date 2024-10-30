@@ -47,11 +47,11 @@ class NotificationService {
     /* const uniqueKey = uuidv4();
     console.log({ uniqueKey }); */
     const messages = deviceTokens.map((token) => ({
-      /*  notification: {
+      data: {
         title: title + "$-*" + iconUrl,
         body: body + "$-*" + actionUrl,
-      }, */
-      webpush: {
+      },
+      /*  webpush: {
         headers: { Urgency: "high" },
         data: {
           title: title,
@@ -71,7 +71,7 @@ class NotificationService {
           link: "https://untrucdejesus.vercel.app",
           //collapseKey: uniqueKey,
         },
-      },
+      }, */
       token: token,
     }));
     console.log({ papa: "papa" });
