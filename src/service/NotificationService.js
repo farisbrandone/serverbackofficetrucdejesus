@@ -78,7 +78,7 @@ class NotificationService {
     try {
       const response = await admin.messaging().sendEach(messages);
       const ref = admin.firestore().collection("Notifications");
-      const date = format(Date.now(), "'le' dd/MM/yyyy 'à' kk:mm");
+      const date = new Date().toUTCString();
       const result = await ref.add({ title, body, iconUrl, actionUrl, date });
       console.log(response);
       return response;
