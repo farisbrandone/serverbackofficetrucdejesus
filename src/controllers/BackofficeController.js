@@ -1,6 +1,6 @@
 const BackofficeService = require("../service/BackofficeService");
 
-export const loginPost = async (req, res) => {
+const loginPost = async (req, res) => {
   const { email, password } = req.body;
   try {
     const { token } = await BackofficeService.loginUserBackoffice(
@@ -13,3 +13,5 @@ export const loginPost = async (req, res) => {
     return res.status(500).json({ error: error.message });
   }
 };
+
+module.exports = { loginPost };
