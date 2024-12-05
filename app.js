@@ -8,6 +8,7 @@ const app = express();
 const PORT = process.env.PORT;
 const bodyParser = require("body-parser");
 const firebaseRoute = require("./src/routes/firebaseRoute");
+const authenticationRoutes = require("./src/routes/authenticationRoutes");
 const {
   sendEveryMinuteNotification,
 } = require("./src/controllers/firebaseController");
@@ -15,6 +16,7 @@ const {
 app.use(bodyParser.json());
 app.use(cors());
 app.use("/api/firebase", firebaseRoute);
+app.use("/api/backoffice", authenticationRoutes);
 app.get("/", (req, res) => {
   res.json({ mama: "ok" });
 });

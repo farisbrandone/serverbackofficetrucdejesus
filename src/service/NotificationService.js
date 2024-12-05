@@ -1,6 +1,5 @@
 const admin = require("../utils/firebase");
 const { format } = require("date-fns");
-const { v4: uuidv4 } = require("uuid");
 const dotenv = require("dotenv");
 dotenv.config();
 async function getDeviceTokensss() {
@@ -44,8 +43,7 @@ class NotificationService {
 
   static async sendMultipleNotification(title, body, iconUrl, actionUrl) {
     const deviceTokens = await getDeviceTokensss();
-    /* const uniqueKey = uuidv4();
-    console.log({ uniqueKey }); */
+
     const messages = deviceTokens.map((token) => ({
       data: {
         title: title + "$-*" + iconUrl,
@@ -74,12 +72,14 @@ class NotificationService {
       }, */
       token: token,
     }));
-    console.log({ papa: "papa" });
+
     try {
       const response = await admin.messaging().sendEach(messages);
       const ref = admin.firestore().collection("Notifications");
       const date = new Date().toUTCString();
+
       const result = await ref.add({ title, body, iconUrl, actionUrl, date });
+
       console.log(response);
       return response;
     } catch (error) {
@@ -100,7 +100,7 @@ class NotificationService {
         .firestore()
         .collection("CommunityData")
         .doc(process.env.COMMUNITYDATAID);
-      const date = format(Date.now(), "'le' dd/MM/yyyy 'à' kk:mm");
+      const date = new Date().toUTCString();
 
       const result = await docRef.update({
         title,
