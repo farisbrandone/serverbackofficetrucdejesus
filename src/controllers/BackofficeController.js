@@ -14,4 +14,14 @@ const loginPost = async (req, res) => {
   }
 };
 
-module.exports = { loginPost };
+const signupFrontPost = async (req, res) => {
+  const data = req.body;
+  try {
+    const result = await BackofficeService.signupFrontOffice(data);
+    res.status(200).send({ ...result });
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
+  }
+};
+
+module.exports = { loginPost, signupFrontPost };
