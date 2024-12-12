@@ -8,7 +8,7 @@ const loginPost = async (req, res) => {
       password
     );
     res.set("Authorization", `Bearer ${token}`);
-    res.status(200).send({ token });
+    res.status(200).json({ token });
   } catch (error) {
     return res.status(500).json({ error: error.message });
   }
@@ -18,10 +18,20 @@ const signupFrontPost = async (req, res) => {
   const data = req.body;
   try {
     const result = await BackofficeService.signupFrontOffice(data);
-    res.status(200).send({ ...result });
+    res.status(200).json({ ...result });
   } catch (error) {
     return res.status(500).json({ error: error.message });
   }
 };
 
-module.exports = { loginPost, signupFrontPost };
+const accceptSignupFrontPost = async (req, res) => {
+  const data = req.body;
+  try {
+    const result = await BackofficeService.acceptSignupFrontOffice(data);
+    res.status(200).json({ ...result });
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
+  }
+};
+
+module.exports = { loginPost, signupFrontPost, accceptSignupFrontPost };
