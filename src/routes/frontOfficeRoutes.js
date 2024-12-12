@@ -16,4 +16,9 @@ router.post("/acceptsignup", async (req, res) => {
   return res.send(result);
 });
 
+router.post("/login", async (req, res) => {
+  const result = await loginFrontPost(req, res);
+  return res.send(result);
+});
+
 module.exports = router;

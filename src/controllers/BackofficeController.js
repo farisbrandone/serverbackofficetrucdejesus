@@ -34,4 +34,25 @@ const accceptSignupFrontPost = async (req, res) => {
   }
 };
 
-module.exports = { loginPost, signupFrontPost, accceptSignupFrontPost };
+const loginFrontPost = async (req, res) => {
+  const { email, password } = req.body;
+  try {
+    const { data, token } = await BackofficeService.loginFrontkoffice(
+      email,
+      password
+    );
+    res.set("Authorization", `Bearer ${token}`);
+    res
+      .status(200)
+      .json({ name: data.name, email: data.email, image: data.image });
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
+  }
+};
+
+module.exports = {
+  loginPost,
+  signupFrontPost,
+  accceptSignupFrontPost,
+  loginFrontPost,
+};

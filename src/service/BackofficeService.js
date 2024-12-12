@@ -75,7 +75,7 @@ class BackofficeService {
           console.log(error);
           throw new Error("Votre email semble ne pas éxister");
         } else {
-          console.log(info);
+          console.log({ info });
         }
       });
 
@@ -148,9 +148,10 @@ class BackofficeService {
         }
       });
 
-      const user = await admin.auth().createUser({
+      const user = await admin.auth()({
         email: data.email,
         emailVerified: false,
+        avatar: data.image,
         password: data.password,
         disabled: false,
       });
