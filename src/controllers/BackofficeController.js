@@ -36,11 +36,13 @@ const accceptSignupFrontPost = async (req, res) => {
 
 const loginFrontPost = async (req, res) => {
   const { email, password } = req.body;
+
   try {
     const { data, token } = await BackofficeService.loginFrontkoffice(
       email,
       password
     );
+
     res.set("Authorization", `Bearer ${token}`);
     res
       .status(200)

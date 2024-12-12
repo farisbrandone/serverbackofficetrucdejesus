@@ -2,6 +2,7 @@ const express = require("express");
 const {
   signupFrontPost,
   accceptSignupFrontPost,
+  loginFrontPost,
 } = require("../controllers/BackofficeController");
 
 const router = express.Router();
@@ -18,7 +19,7 @@ router.post("/acceptsignup", async (req, res) => {
 
 router.post("/login", async (req, res) => {
   const result = await loginFrontPost(req, res);
-  return res.send(result);
+  return res.json(result);
 });
 
 module.exports = router;

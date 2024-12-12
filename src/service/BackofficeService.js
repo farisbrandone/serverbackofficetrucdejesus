@@ -48,7 +48,6 @@ class BackofficeService {
       snapshot.forEach((doc) => {
         result.push(doc.data());
       });
-      console.log({ result });
 
       const ref = admin.firestore().collection("MemberWaitingData");
       const resultOfStore = await ref.add({ ...data });
@@ -75,7 +74,6 @@ class BackofficeService {
           console.log(error);
           throw new Error("Votre email semble ne pas éxister");
         } else {
-          console.log({ info });
         }
       });
 
@@ -120,7 +118,6 @@ class BackofficeService {
       snapshot.forEach((doc) => {
         result.push(doc.data());
       });
-      console.log({ result });
 
       var transporter = nodemailer.createTransport({
         service: "gmail",
@@ -148,7 +145,7 @@ class BackofficeService {
         }
       });
 
-      const user = await admin.auth()({
+      /*  const user = await admin.auth()({
         email: data.email,
         emailVerified: false,
         avatar: data.image,
@@ -156,7 +153,7 @@ class BackofficeService {
         disabled: false,
       });
 
-      console.log(user);
+      console.log(user); */
 
       return {
         success: "Opération effectuée avec success",
@@ -166,6 +163,31 @@ class BackofficeService {
     } catch (error) {
       console.log(error.message);
       throw new Error(error.message);
+    }
+  }
+
+  static async loginFrontkoffice(email, password) {
+    try {
+      let result1 = [];
+      const snapshot1 = await admin.firestore().collection("MemberData").get();
+      snapshot1.forEach((doc) => {
+        if (doc.data().email === email && doc.data().motsDepasse === password) {
+          result1.push(doc.data());
+        }
+      });
+
+      if (result1.length > 0) {
+        const token = jwt.sign({ email, password }, process.env.SECRET_KEY, {
+          expiresIn: "1h",
+        });
+
+        return {
+          data: result1[0],
+          token,
+        };
+      }
+    } catch (error) {
+      throw new Error("La connection à échouer");
     }
   }
 }
