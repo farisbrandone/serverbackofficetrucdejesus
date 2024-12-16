@@ -52,9 +52,21 @@ const loginFrontPost = async (req, res) => {
   }
 };
 
+const getMemberWithEmail = async (req, res) => {
+  const { email, password } = req.body;
+
+  try {
+    const { data } = await BackofficeService.getMemberWithEmail(email);
+    res.status(200).json({ data });
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
+  }
+};
+
 module.exports = {
   loginPost,
   signupFrontPost,
   accceptSignupFrontPost,
   loginFrontPost,
+  getMemberWithEmail,
 };

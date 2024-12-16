@@ -24,6 +24,23 @@ class BackofficeService {
     try {
       let result = [];
       let result1 = [];
+
+      let result2 = [];
+      const snapshot2 = await admin.firestore().collection("MemberData").get();
+      snapshot2.forEach((doc) => {
+        if (doc.data().email === data.email) {
+          result2.push(doc.data());
+        }
+      });
+
+      if (result2.length > 0) {
+        return {
+          success: "Cette adresse fait dejà partir membres",
+          error: "not error",
+          alreadyExist: true,
+        };
+      }
+
       const snapshot1 = await admin
         .firestore()
         .collection("MemberWaitingData")
@@ -93,23 +110,47 @@ class BackofficeService {
       let result = [];
 
       let result1 = [];
+      let result2 = [];
       const snapshot1 = await admin.firestore().collection("MemberData").get();
       snapshot1.forEach((doc) => {
-        if (doc.data().email === data.email) {
+        if (
+          doc.data().email === data.email &&
+          doc.data().groupeId.includes(data.groupeId)
+        ) {
           result1.push(doc.data());
+        }
+        if (
+          doc.data().email === data.email &&
+          !doc.data().groupeId.includes(data.groupeId)
+        ) {
+          result2.push(doc.data);
         }
       });
 
       if (result1.length > 0) {
         return {
-          success: "Cette adresse fait dejà partir membres",
+          success: "Vous ete deja inscrit dans ce groupe",
           error: "not error",
           alreadyExist: true,
         };
       }
+      if (result2.length > 0) {
+        const value = result2[0];
+        const groupeId = value.groupeId.push(data.groupeId);
+        const dataToUpdate = { groupeId };
+        const ref = admin.firestore().collection("MemberData").doc(value.id);
+        const resultOfStore = await ref.update(dataToUpdate);
+        return {
+          success: "Opération effectuée avec success",
+          error: "not error",
+          alreadyExist: false,
+        };
+      }
 
       const ref = admin.firestore().collection("MemberData");
-      const resultOfStore = await ref.add({ ...data });
+      const dataToSend = { ...data, groupeId: [data.groupeId] };
+
+      const resultOfStore = await ref.add({ ...dataToSend });
 
       const snapshot = await admin
         .firestore()
@@ -184,6 +225,26 @@ class BackofficeService {
         return {
           data: result1[0],
           token,
+        };
+      }
+    } catch (error) {
+      throw new Error("La connection à échouer");
+    }
+  }
+
+  static async getMemberWithEmail(email) {
+    try {
+      let result1 = [];
+      const snapshot1 = await admin.firestore().collection("MemberData").get();
+      snapshot1.forEach((doc) => {
+        if (doc.data().email === email) {
+          result1.push(doc.data());
+        }
+      });
+
+      if (result1.length > 0) {
+        return {
+          data: result1[0],
         };
       }
     } catch (error) {
