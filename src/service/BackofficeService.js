@@ -1,7 +1,7 @@
-const admin = require("../utils/firebase");
-const admin2 = require("../../firebaseForFile");
 const jwt = require("jsonwebtoken");
 const nodemailer = require("nodemailer");
+const { secondaryApp, admin2 } = require("../../firebaseForFile");
+const { admin, defaultApp } = require("../utils/firebase");
 //const multer = require("multer");
 //const path = require("path");
 class BackofficeService {
@@ -29,7 +29,10 @@ class BackofficeService {
       let result1 = [];
 
       let result2 = [];
-      const snapshot2 = await admin.firestore().collection("MemberData").get();
+      const snapshot2 = await admin
+        .firestore(defaultApp)
+        .collection("MemberData")
+        .get();
       snapshot2.forEach((doc) => {
         if (doc.data().email === data.email) {
           result2.push({ ...doc.data(), id: doc.id });
@@ -45,7 +48,7 @@ class BackofficeService {
       }
 
       const snapshot1 = await admin
-        .firestore()
+        .firestore(defaultApp)
         .collection("MemberWaitingData")
         .get();
       snapshot1.forEach((doc) => {
@@ -62,14 +65,14 @@ class BackofficeService {
         };
       }
       const snapshot = await admin
-        .firestore()
+        .firestore(defaultApp)
         .collection("EmailNotificationData")
         .get();
       snapshot.forEach((doc) => {
         result.push({ ...doc.data(), id: doc.id });
       });
 
-      const ref = admin.firestore().collection("MemberWaitingData");
+      const ref = admin.firestore(defaultApp).collection("MemberWaitingData");
       const resultOfStore = await ref.add({ ...data });
 
       var transporter = nodemailer.createTransport({
@@ -110,11 +113,14 @@ class BackofficeService {
 
   static async acceptSignupFrontOffice(data) {
     try {
-      let result = [];
+      /*   let result = [];
       let myId = "";
       let result1 = [];
       let result2 = [];
-      const snapshot1 = await admin.firestore().collection("MemberData").get();
+      const snapshot1 = await admin
+        .firestore(defaultApp)
+        .collection("MemberData")
+        .get();
       snapshot1.forEach((doc) => {
         if (
           doc.data().email === data.email &&
@@ -142,7 +148,10 @@ class BackofficeService {
         const value = result2[0];
         const groupeId = value.groupeId.push(data.groupeId);
         const dataToUpdate = { groupeId };
-        const ref = admin.firestore().collection("MemberData").doc(myId);
+        const ref = admin
+          .firestore(defaultApp)
+          .collection("MemberData")
+          .doc(myId);
         const resultOfStore = await ref.update(dataToUpdate);
         return {
           success: "Opération effectuée avec success",
@@ -151,7 +160,7 @@ class BackofficeService {
         };
       }
 
-      const ref = admin.firestore().collection("MemberData");
+      const ref = admin.firestore(defaultApp).collection("MemberData");
       const {
         name,
         email,
@@ -196,14 +205,14 @@ class BackofficeService {
       const resultOfStore = await ref.add({ ...dataToSend });
 
       const snapshot = await admin
-        .firestore()
+        .firestore(defaultApp)
         .collection("BulkNotificationData")
         .get();
       snapshot.forEach((doc) => {
         result.push({ ...doc.data(), id: doc.id });
-      });
+      }); */
 
-      var transporter = nodemailer.createTransport({
+      /*  var transporter = nodemailer.createTransport({
         service: "gmail",
         auth: {
           user: "farisbrandone0@gmail.com",
@@ -228,8 +237,8 @@ class BackofficeService {
           console.log(info);
         }
       });
-
-      const user = await admin2.auth().createUser({
+ */
+      const user = await secondaryApp.auth().createUser({
         email: data.email,
         emailVerified: false,
         avatar: data.image,
@@ -245,7 +254,7 @@ class BackofficeService {
         alreadyExist: false,
       };
     } catch (error) {
-      console.log(error.message);
+      console.log({ papaou: error.message });
       throw new Error(error.message);
     }
   }
@@ -253,7 +262,10 @@ class BackofficeService {
   static async loginFrontkoffice(email, password) {
     try {
       let result1 = [];
-      const snapshot1 = await admin.firestore().collection("MemberData").get();
+      const snapshot1 = await admin
+        .firestore(defaultApp)
+        .collection("MemberData")
+        .get();
       snapshot1.forEach((doc) => {
         if (doc.data().email === email && doc.data().motsDepasse === password) {
           result1.push({ ...doc.data(), id: doc.id });
@@ -278,7 +290,10 @@ class BackofficeService {
   static async getMemberWithEmail(email) {
     try {
       let result1 = [];
-      const snapshot1 = await admin.firestore().collection("MemberData").get();
+      const snapshot1 = await admin
+        .firestore(defaultApp)
+        .collection("MemberData")
+        .get();
       snapshot1.forEach((doc) => {
         if (doc.data().email === email) {
           result1.push({ ...doc.data(), id: doc.id });
@@ -299,7 +314,7 @@ class BackofficeService {
     const uid = process.env.SECRET_KEY;
     console.log("mamou");
     try {
-      token = await admin2.auth().createCustomToken(uid);
+      token = await admin.auth(secondaryApp).createCustomToken(uid);
 
       console.log(token);
       return token;

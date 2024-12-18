@@ -3,7 +3,7 @@ const dotenv = require("dotenv");
 dotenv.config();
 //var serviceAccount = require("./firebaseAdminSDK.json");
 
-admin.initializeApp({
+const defaultApp = admin.initializeApp({
   credential: admin.credential.cert(
     /* serviceAccount */
     {
@@ -20,7 +20,6 @@ admin.initializeApp({
       universe_domain: process.env.FIREBASE_UNIVERSE_DOMAIN,
     }
   ),
-  storageBucket: "{storageBucket}",
 });
 
-module.exports = admin;
+module.exports = { defaultApp, admin };

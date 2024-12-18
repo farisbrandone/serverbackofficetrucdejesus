@@ -3,7 +3,7 @@ const dotenv = require("dotenv");
 dotenv.config();
 //var serviceAccount = require("./firebaseAdminSDK.json");
 
-admin2.initializeApp(
+const secondaryApp = admin2.initializeApp(
   {
     credential: admin2.credential.cert(
       /* serviceAccount */
@@ -26,4 +26,4 @@ admin2.initializeApp(
   "secondaryApp"
 );
 
-module.exports = admin2;
+module.exports = { secondaryApp, admin2 };
