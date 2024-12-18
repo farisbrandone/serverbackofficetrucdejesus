@@ -20,6 +20,7 @@ admin.initializeApp({
       universe_domain: process.env.FIREBASE_UNIVERSE_DOMAIN,
     }
   ),
+  storageBucket: "{storageBucket}",
 });
 
 module.exports = admin;

@@ -4,10 +4,11 @@ const {
   accceptSignupFrontPost,
   loginFrontPost,
   getMemberWithEmail,
+  getUrlFileApp,
 } = require("../controllers/BackofficeController");
-
+//const multer = require("multer");
 const router = express.Router();
-
+//const upload = multer({ dest: "uploads/" });
 router.post("/signup", async (req, res) => {
   const result = await signupFrontPost(req, res);
   return res.send(result);
@@ -23,9 +24,17 @@ router.post("/login", async (req, res) => {
   return res.json(result);
 });
 
-router.post("/get_member_with_email", async (req, res) => {
+router.post("/getmemberwithemail", async (req, res) => {
   const result = await getMemberWithEmail(req, res);
   return res.json(result);
 });
+
+router.post(
+  "/geturlfile",
+  /*  upload.single("file"), */ async (req, res) => {
+    const result = await getUrlFileApp(req, res);
+    return res.json(result);
+  }
+);
 
 module.exports = router;
