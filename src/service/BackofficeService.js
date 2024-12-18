@@ -113,7 +113,7 @@ class BackofficeService {
 
   static async acceptSignupFrontOffice(data) {
     try {
-      /*   let result = [];
+      let result = [];
       let myId = "";
       let result1 = [];
       let result2 = [];
@@ -210,9 +210,9 @@ class BackofficeService {
         .get();
       snapshot.forEach((doc) => {
         result.push({ ...doc.data(), id: doc.id });
-      }); */
+      });
 
-      /*  var transporter = nodemailer.createTransport({
+      var transporter = nodemailer.createTransport({
         service: "gmail",
         auth: {
           user: "farisbrandone0@gmail.com",
@@ -237,7 +237,7 @@ class BackofficeService {
           console.log(info);
         }
       });
- */
+
       const user = await secondaryApp.auth().createUser({
         email: data.email,
         emailVerified: false,
