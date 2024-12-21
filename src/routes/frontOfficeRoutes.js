@@ -6,6 +6,7 @@ const {
   getMemberWithEmail,
   getUrlFileApp,
 } = require("../controllers/BackofficeController");
+const { updateUser } = require("../service/BackofficeService");
 //const multer = require("multer");
 const router = express.Router();
 //const upload = multer({ dest: "uploads/" });
@@ -21,6 +22,11 @@ router.post("/acceptsignup", async (req, res) => {
 
 router.post("/login", async (req, res) => {
   const result = await loginFrontPost(req, res);
+  return res.json(result);
+});
+
+router.post("/updateuser", async (req, res) => {
+  const result = await updateUser(req, res);
   return res.json(result);
 });
 

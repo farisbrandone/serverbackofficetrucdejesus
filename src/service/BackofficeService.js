@@ -259,27 +259,68 @@ class BackofficeService {
     }
   }
 
-  static async loginFrontkoffice(email, password) {
+  static async loginFrontkoffice(email, password, image) {
     try {
+      let result2 = [];
       let result1 = [];
+
+      let myId = "";
       const snapshot1 = await admin
         .firestore(defaultApp)
         .collection("MemberData")
         .get();
       snapshot1.forEach((doc) => {
         if (doc.data().email === email && doc.data().motsDepasse === password) {
+          myId = doc.id;
           result1.push({ ...doc.data(), id: doc.id });
         }
       });
 
+      const snapshot2 = await admin
+        .firestore(defaultApp)
+        .collection("MemberWaitingData")
+        .get();
+      snapshot2.forEach((doc) => {
+        if (
+          doc.data().email === data.email &&
+          doc.data().motsDepasse === password
+        ) {
+          result2.push({ ...doc.data(), id: doc.id });
+        }
+      });
+
+      if (result2.length > 0) {
+        return {
+          data: {},
+          token: "",
+          status: "membre en attente",
+        };
+      }
+
       if (result1.length > 0) {
+        if (!result1[0].image) {
+          const ref = admin
+            .firestore(defaultApp)
+            .collection("MemberData")
+            .doc(myId);
+          const resultOfStore = await ref.update({ image });
+        }
         const token = jwt.sign({ email, password }, process.env.SECRET_KEY, {
           expiresIn: "1h",
         });
 
+        //const user = await secondaryApp.auth().getUserByEmail(req.params.email);
+
         return {
           data: result1[0],
           token,
+          status: "membre deja inscrit",
+        };
+      } else {
+        return {
+          data: {},
+          token: "",
+          status: "membre ni inscrit ni en attentes",
         };
       }
     } catch (error) {
@@ -321,8 +362,32 @@ class BackofficeService {
     } catch (error) {
       console.log({ error: error.message });
     }
+  }
+  static async updateUser(data) {
+    console.log(data.body);
+    console.log(data.body.id);
+    console.log(data.body.uid);
+    try {
+      const ref = admin
+        .firestore(defaultApp)
+        .collection("MemberData")
+        .doc(data.body.id);
+      const resultOfStore = await ref.update({ ...data.body.data });
 
-    /*  admin2
+      await admin.auth(secondaryApp).deleteUser(data.body.uid);
+      return {
+        message: "mise à jour effectué avec succes",
+        update: true,
+      };
+    } catch (error) {
+      throw new Error("La connection à échouer");
+    }
+  }
+}
+
+module.exports = BackofficeService;
+
+/*  admin2
       .auth()
       .createCustomToken(uid)
       .then((customToken) => {
@@ -338,7 +403,7 @@ class BackofficeService {
       throw new error("server error");
     } */
 
-    /*  
+/*  
    //code avant
    const bucket = admin.storage().bucket();
     let fileUrl = "";
@@ -364,10 +429,6 @@ class BackofficeService {
     } catch (error) {
       throw new error(error.message);
     } */
-  }
-}
-
-module.exports = BackofficeService;
 
 /* 
 

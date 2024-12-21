@@ -35,18 +35,17 @@ const accceptSignupFrontPost = async (req, res) => {
 };
 
 const loginFrontPost = async (req, res) => {
-  const { email, password } = req.body;
+  const { email, password, image } = req.body;
 
   try {
-    const { data, token } = await BackofficeService.loginFrontkoffice(
+    const data = await BackofficeService.loginFrontkoffice(
       email,
-      password
+      password,
+      image
     );
 
-    res.set("Authorization", `Bearer ${token}`);
-    res
-      .status(200)
-      .json({ name: data.name, email: data.email, image: data.image });
+    //res.set("Authorization", `Bearer ${token}`);
+    res.status(200).json(data);
   } catch (error) {
     return res.status(500).json({ error: error.message });
   }
@@ -64,10 +63,19 @@ const getMemberWithEmail = async (req, res) => {
 };
 const getUrlFileApp = async (req, res) => {
   //const file = req.file;
-console.log("papou")
+  console.log("papou");
   try {
     const result = await BackofficeService.getUrlFile();
     res.status(200).json({ token: result });
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
+  }
+};
+
+const updateUser = async (req, res) => {
+  try {
+    const { data } = await BackofficeService.updateUser(req.body);
+    res.status(200).json({ data });
   } catch (error) {
     return res.status(500).json({ error: error.message });
   }
@@ -80,4 +88,5 @@ module.exports = {
   loginFrontPost,
   getMemberWithEmail,
   getUrlFileApp,
+  updateUser,
 };
