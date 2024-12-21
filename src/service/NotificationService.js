@@ -80,7 +80,6 @@ class NotificationService {
 
       const result = await ref.add({ title, body, iconUrl, actionUrl, date });
 
-      console.log(response);
       return response;
     } catch (error) {
       console.log(error);
@@ -109,7 +108,7 @@ class NotificationService {
         banniereUrl,
         date,
       });
-      console.log(result);
+
       //await ref.
       /*  const result = await ref.add({
         title,

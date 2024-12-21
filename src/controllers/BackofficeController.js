@@ -53,7 +53,7 @@ const loginFrontPost = async (req, res) => {
 
 const getMemberWithEmail = async (req, res) => {
   const { email } = req.body;
-  console.log(req.body);
+
   try {
     const { data } = await BackofficeService.getMemberWithEmail(email);
     res.status(200).json({ data });
@@ -63,7 +63,7 @@ const getMemberWithEmail = async (req, res) => {
 };
 const getUrlFileApp = async (req, res) => {
   //const file = req.file;
-  console.log("papou");
+
   try {
     const result = await BackofficeService.getUrlFile();
     res.status(200).json({ token: result });
