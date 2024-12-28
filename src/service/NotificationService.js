@@ -16,6 +16,22 @@ async function getDeviceTokensss() {
   }
 }
 
+
+
+async function getDeviceTokensMessage() {
+  let registrationTokens = [];
+  try {
+    const ref = admin.firestore().collection("DeviceForReseauSocialData");
+    const dataOfDeviceTokens = await ref.get();
+    dataOfDeviceTokens.forEach((doc) => {
+      registrationTokens.push(doc.data());
+    });
+    return registrationTokens;
+  } catch (error) {
+    throw new Error("failed to get device tokens");
+  }
+}
+
 class NotificationService {
   static async sendNotification(title, body, iconUrl = "", actionUrl = "") {
     try {
@@ -79,6 +95,72 @@ class NotificationService {
       const date = new Date().toUTCString();
 
       const result = await ref.add({ title, body, iconUrl, actionUrl, date });
+
+      return response;
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
+  }
+
+  static async sendMultipleMessageNotification(req, res) {
+
+/* export interface DeviceForReseauSocialDataType {
+  deviceNumber: string;
+  user: MembreData;
+  dateOfCreation?: string;
+  dateOfUpdate?: string;
+  id?: string;
+}
+
+
+{user, message}
+ */
+
+
+ /* 
+ export interface MessageData {
+  dateOfCreation?: string;
+  dateOfUpdate?: string;
+  id?: string;
+  userReceiverId?: string;
+  userReceiverEmail?: string;
+  userId: string;
+  userName: string;
+  userAvatar: string;
+  userEmail?: string;
+  text: string;
+  photo: string;
+  audio: string;
+  video: string;
+  othersFile: string;
+  userLikes: string[];
+  groupeName: string;
+  groupeId?: string;
+  communityId: string;
+  typeMessage: string;
+}
+ 
+ 
+ */
+
+    const deviceTokens = await getDeviceTokensMessage();
+    const value = req.body;
+    const trueDevice=deviceTokens.filter((val)=>!!value.user.find((us)  =>us.email=== val.user.email))
+    const messages = trueDevice.map((deviceToken) => ({
+      data: {
+        title: `${value.message.userName}` + "$-*" + `${value.message.userAvatar}`,
+        body: `${value.message.text}` + "$-*" + `https://reseausocial-trucdejesus.vercel.app/community/00wOWSI8yjxruMrzbXk3/${value.message.groupeId}`,
+      },
+      token: deviceToken.deviceNumber,
+    }));
+
+    try {
+      const response = await admin.messaging().sendEach(messages);
+      const ref = admin.firestore().collection("NotificationMessageData");
+      const date = new Date().toUTCString();
+
+      const result = await ref.add({ ...value, dateOfCreation:date});
 
       return response;
     } catch (error) {

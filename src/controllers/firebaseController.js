@@ -29,6 +29,17 @@ const sendMultipleFirebaseNotification = async (req, res) => {
   }
 };
 
+const sendMultipleFirebaseMessageNotification = async (req, res) => {
+  try {
+    await NotificationService.sendMultipleMessageNotification(req, res);
+    res
+      .status(200)
+      .json({ message: "notification sent successfully", success: true });
+  } catch (error) {
+    res.status(200).json({ message: error.message, success: false });
+  }
+};
+
 async function sendEveryMinuteNotification() {
   const title = "Every Minute Notification";
   const body = "Hello from body";
@@ -60,4 +71,5 @@ module.exports = {
   sendEveryMinuteNotification,
   sendMultipleFirebaseNotification,
   sendModificationOnCommunity,
+  sendMultipleFirebaseMessageNotification,
 };

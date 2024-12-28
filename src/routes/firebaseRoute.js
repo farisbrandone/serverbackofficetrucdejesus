@@ -3,6 +3,7 @@ const {
   sendFirebaseNotification,
   sendMultipleFirebaseNotification,
   sendModificationOnCommunity,
+  sendMultipleFirebaseMessageNotification,
 } = require("../controllers/firebaseController");
 const router = express.Router();
 router.post("/send-notification", async (req, res) => {
@@ -12,6 +13,11 @@ router.post("/send-notification", async (req, res) => {
 
 router.post("/send-multiple-notification", async (req, res) => {
   const result = await sendMultipleFirebaseNotification(req, res);
+  return res.send(result);
+});
+
+router.post("/send-message-notification", async (req, res) => {
+  const result = await sendMultipleFirebaseMessageNotification(req, res);
   return res.send(result);
 });
 
