@@ -5,7 +5,7 @@ dotenv.config();
 async function getDeviceTokensss() {
   let registrationTokens = [];
   try {
-    const ref = admin.firestore().collection("DeviceTokens");
+    const ref = admin.defaultApp.firestore().collection("DeviceTokens");
     const dataOfDeviceTokens = await ref.get();
     dataOfDeviceTokens.forEach((doc) => {
       registrationTokens.push(doc.data().token);
@@ -16,16 +16,17 @@ async function getDeviceTokensss() {
   }
 }
 
-
-
 async function getDeviceTokensMessage() {
   let registrationTokens = [];
   try {
-    const ref = admin.firestore().collection("DeviceForReseauSocialData");
+    const ref = admin.defaultApp
+      .firestore()
+      .collection("DeviceForReseauSocialData");
     const dataOfDeviceTokens = await ref.get();
     dataOfDeviceTokens.forEach((doc) => {
       registrationTokens.push(doc.data());
     });
+
     return registrationTokens;
   } catch (error) {
     throw new Error("failed to get device tokens");
@@ -46,8 +47,8 @@ class NotificationService {
         token: deviceTokens[0],
       };
       /**promise all pour envoyer et stocker le message en meme temps */
-      const response = await admin.messaging().send(message);
-      const ref = admin.firestore().collection("Notifications");
+      const response = await admin.defaultApp.messaging().send(message);
+      const ref = admin.defaultApp.firestore().collection("Notifications");
       const date = format(Date.now(), "'le' dd/MM/yyyy 'à' kk:mm");
       const result = await ref.add({ title, body, iconUrl, actionUrl, date });
 
@@ -90,8 +91,8 @@ class NotificationService {
     }));
 
     try {
-      const response = await admin.messaging().sendEach(messages);
-      const ref = admin.firestore().collection("Notifications");
+      const response = await admin.defaultApp.messaging().sendEach(messages);
+      const ref = admin.defaultApp.firestore().collection("Notifications");
       const date = new Date().toUTCString();
 
       const result = await ref.add({ title, body, iconUrl, actionUrl, date });
@@ -104,8 +105,7 @@ class NotificationService {
   }
 
   static async sendMultipleMessageNotification(req, res) {
-
-/* export interface DeviceForReseauSocialDataType {
+    /* export interface DeviceForReseauSocialDataType {
   deviceNumber: string;
   user: MembreData;
   dateOfCreation?: string;
@@ -117,8 +117,7 @@ class NotificationService {
 {user, message}
  */
 
-
- /* 
+    /* 
  export interface MessageData {
   dateOfCreation?: string;
   dateOfUpdate?: string;
@@ -145,22 +144,32 @@ class NotificationService {
  */
 
     const deviceTokens = await getDeviceTokensMessage();
+
     const value = req.body;
-    const trueDevice=deviceTokens.filter((val)=>!!value.user.find((us)  =>us.email=== val.user.email))
+    const trueDevice = deviceTokens.filter(
+      (val) => !!value.user.find((us) => us.email === val.user.email)
+    );
+
     const messages = trueDevice.map((deviceToken) => ({
       data: {
-        title: `${value.message.userName}` + "$-*" + `${value.message.userAvatar}`,
-        body: `${value.message.text}` + "$-*" + `https://reseausocial-trucdejesus.vercel.app/community/00wOWSI8yjxruMrzbXk3/${value.message.groupeId}`,
+        title:
+          `${value.message.userName}` + "$-*" + `${value.message.userAvatar}`,
+        body:
+          `${value.message.text}` +
+          "$-*" +
+          `https://reseausocial-trucdejesus.vercel.app/community/00wOWSI8yjxruMrzbXk3/${value.message.groupeId}`,
       },
       token: deviceToken.deviceNumber,
     }));
 
     try {
-      const response = await admin.messaging().sendEach(messages);
-      const ref = admin.firestore().collection("NotificationMessageData");
+      const response = await admin.defaultApp.messaging().sendEach(messages);
+      const ref = admin.defaultApp
+        .firestore()
+        .collection("NotificationMessageData");
       const date = new Date().toUTCString();
 
-      const result = await ref.add({ ...value, dateOfCreation:date});
+      const result = await ref.add({ ...value, dateOfCreation: date });
 
       return response;
     } catch (error) {
@@ -176,8 +185,8 @@ class NotificationService {
     banniereUrl
   ) {
     try {
-      //const ref = admin.firestore().collection("CommunityData");
-      const docRef = admin
+      //const ref = admin.defaultApp.firestore().collection("CommunityData");
+      const docRef = admin.defaultApp
         .firestore()
         .collection("CommunityData")
         .doc(process.env.COMMUNITYDATAID);
