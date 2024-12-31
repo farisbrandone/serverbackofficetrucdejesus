@@ -81,6 +81,15 @@ const updateUser = async (req, res) => {
   }
 };
 
+const olivierCarteController = async (req, res) => {
+  try {
+    const { data } = await BackofficeService.olivierCarte(req, res);
+    res.status(200).json({ data });
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
+  }
+};
+
 module.exports = {
   loginPost,
   signupFrontPost,
@@ -89,4 +98,5 @@ module.exports = {
   getMemberWithEmail,
   getUrlFileApp,
   updateUser,
+  olivierCarteController,
 };

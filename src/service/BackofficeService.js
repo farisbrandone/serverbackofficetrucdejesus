@@ -377,6 +377,55 @@ class BackofficeService {
       throw new Error("La connection à échouer");
     }
   }
+
+  static async olivierCarte(req, res) {
+    const {
+      message,
+      senderEmail,
+      receiverEmail,
+      senderPrenom,
+      receiverPrenom,
+    } = req.body;
+    try {
+      var transporter = nodemailer.createTransport({
+        service: "gmail",
+        auth: {
+          user: "farisbrandone0@gmail.com",
+          pass: process.env.APP_PASSWORD,
+        },
+      });
+
+      var mailoutput = `
+         <p> ${message} </p>
+        <br />
+        <p>Contacter ${senderPrenom} à l'adresse ${senderEmail} </p>
+      `;
+      var objetMail = `Message de ${senderPrenom} `;
+      var mailOptions = {
+        from: "farisbrandone0@gmail.com",
+        to: receiverEmail,
+        subject: objetMail,
+        html: mailoutput,
+      };
+
+      transporter.sendMail(mailOptions, function (error, info) {
+        if (error) {
+          console.log(error);
+          throw new Error("Votre email semble ne pas éxister");
+        } else {
+        }
+      });
+
+      return {
+        success: "Opération effectuée avec success",
+        error: "not error",
+        alreadyExist: false,
+      };
+    } catch (error) {
+      console.log(error.message);
+      throw new Error(error.message);
+    }
+  }
 }
 
 module.exports = BackofficeService;

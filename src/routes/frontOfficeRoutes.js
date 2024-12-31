@@ -5,6 +5,7 @@ const {
   loginFrontPost,
   getMemberWithEmail,
   getUrlFileApp,
+  olivierCarteController,
 } = require("../controllers/BackofficeController");
 const { updateUser } = require("../service/BackofficeService");
 //const multer = require("multer");
@@ -42,5 +43,10 @@ router.post(
     return res.json(result);
   }
 );
+
+router.post("/oliviercarte", async (req, res) => {
+  const result = await olivierCarteController(req, res);
+  return res.json(result);
+});
 
 module.exports = router;
